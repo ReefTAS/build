@@ -1,5 +1,7 @@
 FROM ubuntu:16.04
 
+RUN dpkg --add-architecture i386
+
 # native platform development and build system functionality (about 400 MB installed)
 RUN apt-get update && apt-get -y install \
     sudo \
@@ -29,6 +31,12 @@ RUN apt-get update && apt-get -y install \
     dosfstools \
     mtools  \
     android-tools-fsutils
+
+RUN apt-get -y install \
+    g++-multilib \
+    libssl-dev:i386 \
+    libcrypto++-dev:i386 \
+    zlib1g-dev:i386
 
 # Set the locale
 RUN locale-gen en_US.UTF-8  
