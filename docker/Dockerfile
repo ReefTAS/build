@@ -38,6 +38,10 @@ RUN apt-get -y install \
     libcrypto++-dev:i386 \
     zlib1g-dev:i386
 
+RUN apt-get -y install \
+    vim \
+    tmux
+
 # Set the locale
 RUN locale-gen en_US.UTF-8  
 ENV LANG en_US.UTF-8  

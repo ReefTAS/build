@@ -24,15 +24,16 @@ hide :=
 endif
 
 TOP := $(abspath .)
-OUT ?= $(abspath $(TOP)/out)
+OUT ?= $(abspath $(TOP)/out/$(MACHINE))
 
-REEFTAS_IMAGE := reeftas
-REEFTAS_IMAGE_VERSION ?= latest
-REEFTAS_IMAGE_ID := $(shell docker images -q $(REEFTAS_IMAGE):$(REEFTAS_IMAGE_VERSION))
+REEFTAS_DOCKER_IMAGE := reeftas
+REEFTAS_DOCKER_IMAGE_VERSION ?= latest
+IMAGE ?= reeftas-image
+REEFTAS_DOCKER_IMAGE_ID := $(shell docker images -q $(REEFTAS_DOCKER_IMAGE):$(REEFTAS_DOCKER_IMAGE_VERSION))
 
 build-reeftas-docker-image:
 ifeq ($(REEFTAS_IMAGE_ID),)
-	cd $(TOP)/build/docker && docker build -t $(REEFTAS_IMAGE):$(REEFTAS_IMAGE_VERSION) .
+	cd $(TOP)/build/docker && docker build -t $(REEFTAS_DOCKER_IMAGE):$(REEFTAS_DOCKER_IMAGE_VERSION) .
 endif
 
 $(OUT):
@@ -44,10 +45,12 @@ reeftas: build-reeftas-docker-image $(OUT)
 	     				-v $(TOP):$(TOP) \
 					-e REEFTAS_ROOT=$(TOP) \
 				 	-e REEFTAS_OUT=$(OUT) \
-					$(REEFTAS_IMAGE):$(REEFTAS_IMAGE_VERSION)
+					-e MACHINE=$(MACHINE) \
+					-e REEFTAS_IMAGE=$(IMAGE) \
+					$(REEFTAS_DOCKER_IMAGE):$(REEFTAS_DOCKER_IMAGE_VERSION)
 clean:
 	$(hide) rm -fr $(OUT)
-	$(hide) docker rmi $(REEFTAS_IMAGE_ID)
+	$(hide) docker rmi $(REEFTAS_DOCKER_IMAGE_ID)
 
 .PHONY:reeftas
 all:reeftas
