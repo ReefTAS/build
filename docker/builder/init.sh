@@ -12,7 +12,7 @@ if ! getent passwd $DOCKDEV_USER_NAME > /dev/null
 set -x
 echo "TEMPLATECONF=$REEFTAS_ROOT/platform/yocto/meta-reeftas/conf/ \
       source ${REEFTAS_ROOT}/platform/yocto/poky/oe-init-build-env ${REEFTAS_OUT} &&
-      bitbake ${REEFTAS_IMAGE}" > /tmp/build.sh
+      bitbake ${IMAGE}" > /tmp/build.sh
 
 sudo -E -u $DOCKDEV_USER_NAME bash -C "/tmp/build.sh"
 if [ $? -ne 0 ]; then
